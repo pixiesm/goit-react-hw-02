@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Description from "./components/description/Description";
 import Options from "./components/options/Options";
@@ -7,7 +7,13 @@ import Notification from "./components/Notification/Notification";
 
 function App() {
   const initialFeedback = { good: 0, neutral: 0, bad: 0 };
-  const [reviews, setReviews] = useState(initialFeedback);
+  const [reviews, setReviews] = useState(() => {
+    const savedData = JSON.parse(window.localStorage.getItem("reviews"));
+    if (savedData?.length) {
+      return savedData;
+    }
+    return initialFeedback;
+  });
 
   const totalFeedback = reviews.good + reviews.neutral + reviews.bad;
 
@@ -20,6 +26,10 @@ function App() {
       [feedbackType]: prevFeedback[feedbackType] + 1,
     }));
   };
+  useEffect(() => {
+    window.localStorage.setItem("reviews", JSON.stringify(reviews));
+  }, [reviews]);
+
   const resetFeedback = () => {
     const initialFeedback = { good: 0, neutral: 0, bad: 0 };
     setReviews(initialFeedback);

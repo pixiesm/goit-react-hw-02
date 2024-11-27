@@ -9,7 +9,7 @@ function App() {
   const initialFeedback = { good: 0, neutral: 0, bad: 0 };
   const [reviews, setReviews] = useState(() => {
     const savedData = JSON.parse(window.localStorage.getItem("reviews"));
-    if (savedData?.length) {
+    if (savedData) {
       return savedData;
     }
     return initialFeedback;
